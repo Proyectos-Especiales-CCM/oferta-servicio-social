@@ -14,19 +14,7 @@ export default function Page(context: any) {
   const [project, setProject] = React.useState<ProjectTagsSplit>();
   const [error, setError] = React.useState<string | null>(null);
 
-
-  const fetchProject = async (id: string) => {
-    const supabase = createClient();
-    let { data: fetchedProject, error } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('id', id);
-    if (error) setError(error.message);
-    else if (fetchedProject) {
-      const parsedProject = mapProjectToProjectTagsSplit(fetchedProject[0]);
-      setProject(parsedProject);
-    }
-  };
+  const supabase = createClient();
 
   React.useEffect(() => {
     const id = context.params.proyecto;
@@ -68,7 +56,7 @@ export default function Page(context: any) {
               removeWrapper
               alt="Card example background"
               className="z-0 max-w-xs max-h-40 group-hover/card:scale-125 transition-all duration-200 ease-in-out object-contain"
-              src={project?.image}
+              src={supabase.storage.from('ServicioSocialProjectImages').getPublicUrl(project?.image).data.publicUrl}
               width={500}
               height={500}
             />
