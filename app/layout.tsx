@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { GeistSans } from "geist/font/sans";
 import './globals.css'
 import { NavMenu } from '@/components/navmenu';
+import { ProjectsContextProvider } from '@/context/ProjectsContext';
 
 
 export const metadata: Metadata = {
@@ -48,9 +49,11 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={GeistSans.className}>
-        <NavMenu />
-        {children}
-        </body>
+        <ProjectsContextProvider>
+          <NavMenu />
+          {children}
+        </ProjectsContextProvider>
+      </body>
     </html>
   )
 }

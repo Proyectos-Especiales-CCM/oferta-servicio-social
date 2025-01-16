@@ -5,28 +5,13 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
-import { createClient } from "@/lib/supabase/server"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 import React from "react"
-import SignOutButton from "./SignOutButton"
 import { Separator } from "./ui/separator"
-import { AdminProfile } from "@/lib/types/users/schema"
 
 export async function NavMenu() {
-  const supabase = createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  const { data: fetchedAdmins, error } = await supabase
-    .from('admin_profiles')
-    .select('*') as { data: AdminProfile[], error: any }
-
-  let isAdmin = false;
-  if (user?.email) isAdmin = fetchedAdmins.map((admin: AdminProfile) => admin.email).includes(user?.email);
-
   return (
     <div className="flex w-full items-center justify-center lg:justify-between px-1 lg:px-40 space-x-8 pt-2">
       <Link href="/" passHref>
@@ -57,42 +42,13 @@ export async function NavMenu() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          {user ? (
-            <>
-              <NavigationMenuItem>
-                <Link href="/favoritos" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Favoritos
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              {isAdmin && (
-                <NavigationMenuItem>
-                  <Link href="/admin" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Admin
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              )}
-              <NavigationMenuItem>
-                <Link href="/account" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Account
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <SignOutButton className={navigationMenuTriggerStyle()} />
-            </>
-          ) : (
-            <NavigationMenuItem>
-              <Link href="/login" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Login
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          )}
+          <NavigationMenuItem>
+            <Link href="/favoritos" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Favoritos
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div >

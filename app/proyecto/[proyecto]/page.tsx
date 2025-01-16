@@ -4,34 +4,41 @@ import { ProjectTagsSplit, mapProjectToProjectTagsSplit } from '@/lib/types/proj
 import { Chip, Image } from '@nextui-org/react';
 import { Calendar, ChevronRightSquare, Clock, Goal, Hammer, Map, Package, PersonStanding, Users2, Watch } from 'lucide-react';
 import NextImage from "next/image";
-import React from 'react';
+import React, { useCallback } from 'react';
 import BackButton from '@/components/ui/BackButton';
 import FavoriteButton from './favorite-button';
 import { createClient } from '@/lib/supabase/client';
+import { useProjectsContext } from '@/context/useProjectsContext';
 
 
 export default function Page(context: any) {
+  const { projects } = useProjectsContext();
+
   const [project, setProject] = React.useState<ProjectTagsSplit>();
   const [error, setError] = React.useState<string | null>(null);
 
   const supabase = createClient();
 
-  React.useEffect(() => {
-    const id = context.params.proyecto;
+  const fetchProject = useCallback(async (id: number) => {
+    let { data: fetchedProject, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('id', id);
+    if (error) setError(error.message);
+    else if (fetchedProject) {
+      const parsedProject = mapProjectToProjectTagsSplit(fetchedProject[0]);
+      setProject(parsedProject);
+    }
+  }, [supabase]);
 
-    const fetchProject = async (id: string) => {
-      let { data: fetchedProject, error } = await supabase
-        .from('projects')
-        .select('*')
-        .eq('id', id);
-      if (error) setError(error.message);
-      else if (fetchedProject) {
-        const parsedProject = mapProjectToProjectTagsSplit(fetchedProject[0]);
-        setProject(parsedProject);
-      }
-    };
-    fetchProject(id);
-  }, [context.params.proyecto, supabase]);
+  React.useEffect(() => {
+    const id = Number(context.params.proyecto);
+    // Try getting the project from context first
+    if (projects) {
+      const project = projects.find(project => project.id === id);
+      if (project) setProject(project); else fetchProject(id);
+    } else fetchProject(id);
+  }, [context.params.proyecto, fetchProject, projects]);
 
   return (
     <main className="flex flex-col px-4 md:px-36 pt-6 pb-10">

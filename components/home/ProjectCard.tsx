@@ -5,7 +5,6 @@ import { Boxes, Clock, Star } from "lucide-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { addToFavorites, removeFromFavorites } from "@/lib/favorites/actions";
 
 interface CardComponentProps {
   id: number;
@@ -31,22 +30,21 @@ export default function ProjectCard({ id, title, tags, image, description, hours
 
   const supabase = createClient();
 
-  const handleFavoriteSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    try {
-      if (favorite) {
-        await removeFromFavorites(formData);
-        setFavorite(false);
-      } else {
-        await addToFavorites(formData);
-        setFavorite(true);
-      }
-      console.log("Favorite added/removed successfully");
-    } catch (error) {
-      console.error(error);
+  /**
+   * Change the favorite state and update localStorage
+   */
+  const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
+    const newFavValue = !favorite;
+    setFavorite(newFavValue);
+    if (newFavValue) {
+      favorites[id] = true; // Set this project as a favorite
+    } else {
+      delete favorites[id]; // Remove this project from favorites
     }
-  }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  };
 
   useEffect(() => {
     if (favoritesIDs.includes(id)) setFavorite(true);
@@ -54,12 +52,9 @@ export default function ProjectCard({ id, title, tags, image, description, hours
 
   return (
     <Card isFooterBlurred className="w-full h-[300px] col-span-12 sm:col-span-4 group/card">
-      <form method="post" onSubmit={handleFavoriteSubmit}>
-        <input type="hidden" name="project_id" value={id} />
-        <Button className="absolute z-10 top-3 right-2 bg-white/50" size="sm" isIconOnly type="submit">
-          <Star className={`w-4 h-4 ${favorite && "fill-yellow-500"}`} strokeWidth={1} />
-        </Button>
-      </form>
+      <Button className="absolute z-10 top-3 right-2 bg-white/50" size="sm" isIconOnly onClick={(e) => handleFavoriteClick(e)}>
+        <Star className={`w-4 h-4 ${favorite && "fill-yellow-500"}`} strokeWidth={1} />
+      </Button>
       <Link href={`/proyecto/${id}`} className="w-full h-full relative z-0">
         <CardHeader className="absolute z-10 flex-col items-start bg-gradient-to-b from-black/60">
           <h4 className="w-[90%] text-zinc-100 font-medium text-xl lg:text-2xl">

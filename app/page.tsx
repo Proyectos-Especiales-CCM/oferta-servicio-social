@@ -1,8 +1,9 @@
 "use client"
 
 import { Filter, ProjectCard, SearchBar } from "@/components/home";
+import { useProjectsContext } from "@/context/useProjectsContext";
 import { createClient } from "@/lib/supabase/client";
-import { ProjectTagsSplit, mapProjectToProjectTagsSplit } from '@/lib/types/project/schema';
+import { mapProjectToProjectTagsSplit } from '@/lib/types/project/schema';
 import { Button } from "@nextui-org/react";
 import { X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -10,6 +11,7 @@ import React, { useCallback } from "react";
 
 
 export default function App() {
+  const { projects, setProjects } = useProjectsContext();
 
   const router = useRouter()
   const pathname = usePathname()
@@ -28,41 +30,30 @@ export default function App() {
   const [searchTerm, setSearchTerm] = React.useState(searchParams.get('search') || '');
   const [selectedHours, setSelectedHours] = React.useState(searchParams.get('hours') || '');
   const [selectedTags, setSelectedTags] = React.useState(searchParams.get('tags') || '');
-  const [projects, setProjects] = React.useState<ProjectTagsSplit[]>([]);
   const [favoritesIDs, setFavoritesIDs] = React.useState<number[]>([]);
   const [error, setError] = React.useState<string | null>(null);
 
-  const fetchProjects = async () => {
-    const supabase = createClient();
-    let { data: fetchedProjects, error } = await supabase
-      .from('projects')
-      .select('*')
-      .order('id', { ascending: true })
-      .eq('status', 'visible');
-    if (error) setError(error.message);
-    else if (fetchedProjects) {
-      const mappedProjects = fetchedProjects.map(mapProjectToProjectTagsSplit);
-      setProjects(mappedProjects);
-
-      // Fetch favorites from the user
-      const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log(user);
-      // Handle user not logged in
-      if (!user) return;
-      const { data: favorites, error } = await supabase
-        .from('favorites_projects')
-        .select('project_id')
-        .eq('user_id', user?.id);
-      if (error) {
-        setError(error.message);
-        console.error(error.message);
+  const fetchProjects = useCallback(async () => {
+    // Try getting the projects from context first
+    if (projects === undefined) {
+      try {
+        const supabase = createClient();
+        let { data: fetchedProjects, error } = await supabase
+          .from('projects')
+          .select('*')
+          .order('id', { ascending: true })
+          .eq('status', 'visible');
+        if (error) setError(error.message);
+        else if (fetchedProjects) {
+          const mappedProjects = fetchedProjects.map(mapProjectToProjectTagsSplit);
+          setProjects(mappedProjects);
+        }
+      } catch (error) {
+        console.error(error);
+        setError("An error occurred while fetching the projects");
       }
-      else if (favorites) {
-        setFavoritesIDs(favorites.map((favorite: { project_id: number }) => favorite.project_id));
-      };
     }
-  };
+  }, [projects, setProjects]);
 
   const handleReset = () => {
     router.push(pathname)
@@ -86,7 +77,7 @@ export default function App() {
     setSelectedTags(selectedTags);
   };
 
-  const filteredData = projects
+  const filteredData = (projects ?? [])
     .filter((item) => item.title.toLowerCase().includes(searchTerm))
     .filter((item) => {
       if (selectedHours.length === 0) return true;
@@ -98,27 +89,18 @@ export default function App() {
     });
 
   // Extract unique hours from filteredData for the Filter component
-  const hoursOptions = Array.from(new Set(projects.map(item => item.hours)))
+  const hoursOptions = Array.from(new Set((projects ?? []).map(item => item.hours)))
     .map(hours => ({ label: `${hours} Horas`, value: hours }));
 
-  const tagOptions = Array.from(new Set(projects.flatMap(item => item.tags.map(tag => tag.name))))
+  const tagOptions = Array.from(new Set((projects ?? []).flatMap(item => item.tags.map(tag => tag.name))))
     .map(tagName => ({ label: tagName, value: tagName }));
 
-  const verifyPasswordRecovery = useCallback(() => {
-    const supabase = createClient();
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      //console.log(event);
-      if (event == "PASSWORD_RECOVERY") {
-        console.log('Recuperación de contraseña');
-        router.push("/account");
-      }
-    })
-  }, [router]);
-
   React.useEffect(() => {
-    verifyPasswordRecovery();
+    // Fetch favorites from the user
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
+    setFavoritesIDs(Object.keys(favorites).map(Number));
     fetchProjects();
-  }, [verifyPasswordRecovery]);
+  }, [fetchProjects]);
 
   return (
     <main className="flex min-h-screen flex-col px-4 lg:px-20 pb-10">
