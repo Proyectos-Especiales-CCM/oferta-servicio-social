@@ -7,10 +7,10 @@ import { mapProjectToProjectTagsSplit } from '@/lib/types/project/schema';
 import { Button } from "@nextui-org/react";
 import { X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import React, { useCallback } from "react";
+import React, { useCallback, Suspense } from "react";
 
 
-export default function App() {
+function PageContent() {
   const { projects, setProjects } = useProjectsContext();
 
   const router = useRouter()
@@ -132,5 +132,13 @@ export default function App() {
         ))}
       </div>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }

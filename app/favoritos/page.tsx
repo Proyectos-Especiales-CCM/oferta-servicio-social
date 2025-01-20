@@ -2,14 +2,14 @@
 
 import { Button } from "@nextui-org/react";
 import { X } from "lucide-react";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, Suspense } from "react";
 import { Filter, ProjectCard, SearchBar } from "@/components/home";
 import { createClient } from "@/lib/supabase/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { mapProjectToProjectTagsSplit, ProjectTagsSplit } from "@/lib/types/project/schema";
 import { useProjectsContext } from "@/context/useProjectsContext";
 
-export default function Page() {
+function PageContent() {
   const { projects } = useProjectsContext();
 
   const router = useRouter()
@@ -136,5 +136,13 @@ export default function Page() {
         ))}
       </div>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PageContent />
+    </Suspense>
   );
 }
