@@ -104,7 +104,7 @@ export default function App() {
 
   return (
     <main className="flex min-h-screen flex-col px-4 lg:px-20 pb-10">
-      <h1 className="text-3xl font-bold py-5">Oferta Servicio Social - Invierno - 2025</h1>
+      <h1 className="text-3xl font-bold py-5">Oferta Servicio Social - Febrero - Junio - 2025</h1>
       <div className="flex flex-col md:flex-row mb-6 gap-2 items-center">
         <SearchBar searchTerm={searchTerm} onSearch={handleSearch} />
         {/* Add the Filter component here */}

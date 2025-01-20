@@ -7,14 +7,14 @@ import { ProjectsContextProvider } from '@/context/ProjectsContext';
 
 
 export const metadata: Metadata = {
-  title: 'Oferta Servicio Social - Invierno - 2025',
-  description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Invierno 2025',
+  title: 'Oferta Servicio Social - Febrero - Junio - 2025',
+  description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Febrero - Junio 2025',
   metadataBase: new URL('https://oferta-servicio-social.vercel.app/'),
   openGraph: {
     type: 'website',
     url: 'https://oferta-servicio-social.vercel.app/',
-    title: 'Oferta Servicio Social - Invierno - 2025',
-    description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Invierno 2025',
+    title: 'Oferta Servicio Social - Febrero - Junio - 2025',
+    description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Febrero - Junio 2025',
     images: [
       {
         url: 'https://oferta-servicio-social.vercel.app/opengraph/opengraph-image.png',
