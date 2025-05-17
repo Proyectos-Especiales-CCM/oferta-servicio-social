@@ -1,14 +1,14 @@
 "use client"
 
+import { Filter, ProjectCard, SearchBar } from "@/components/home";
+import Select from "@/components/home/Select";
+import { useProjectsContext } from "@/context/useProjectsContext";
+import { createClient } from "@/lib/supabase/client";
+import { mapProjectToProjectTagsSplit } from '@/lib/types/project/schema';
 import { Button } from "@nextui-org/react";
 import { X } from "lucide-react";
-import Select from "@/components/home/Select";
-import React, { useCallback, useEffect, Suspense } from "react";
-import { Filter, ProjectCard, SearchBar } from "@/components/home";
-import { createClient } from "@/lib/supabase/client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { mapProjectToProjectTagsSplit, ProjectTagsSplit } from "@/lib/types/project/schema";
-import { useProjectsContext } from "@/context/useProjectsContext";
+import React, { useCallback, Suspense } from "react";
 
 const periodOptions = [
   { label: "Verano", value: "verano" },
@@ -18,7 +18,7 @@ const periodOptions = [
 ];
 
 function PageContent() {
-  const { projects } = useProjectsContext();
+  const { projects, setProjects } = useProjectsContext();
 
   const router = useRouter()
   const pathname = usePathname()
@@ -39,35 +39,30 @@ function PageContent() {
   const [selectedTags, setSelectedTags] = React.useState(searchParams.get('tags') || '');
   const [selectedModel, setSelectedModel] = React.useState(searchParams.get('model') || '');
   const [selectedPeriod, setSelectedPeriod] = React.useState(searchParams.get('period') || '');
-  const [favProjects, setFavProjects] = React.useState<ProjectTagsSplit[]>([]);
   const [favoritesIDs, setFavoritesIDs] = React.useState<number[]>([]);
   const [error, setError] = React.useState<string | null>(null);
 
-  const fetchProjects = useCallback(async (favIDs: number[]) => {
+  const fetchProjects = useCallback(async () => {
+    // Try getting the projects from context first
     if (projects === undefined) {
-      console.log('No projects found in context, fetching...');
       try {
         const supabase = createClient();
         let { data: fetchedProjects, error } = await supabase
           .from('projects')
           .select('*')
           .order('id', { ascending: true })
-          .eq('status', 'visible')
-          .in('id', favIDs);
+          .eq('status', 'visible');
         if (error) setError(error.message);
         else if (fetchedProjects) {
           const mappedProjects = fetchedProjects.map(mapProjectToProjectTagsSplit);
-          setFavProjects(mappedProjects);
+          setProjects(mappedProjects);
         }
       } catch (error) {
         console.error(error);
         setError("An error occurred while fetching the projects");
       }
-    } else {
-      console.log('Projects found in context, filtering...');
-      setFavProjects(projects.filter(project => favIDs.includes(project.id)));
     }
-  }, [projects, setFavProjects]);
+  }, [projects, setProjects]);
 
   const handleReset = () => {
     router.push(pathname)
@@ -102,9 +97,9 @@ function PageContent() {
     router.push(pathname + '?' + createQueryString('period', selectedPeriod));
     setSelectedPeriod(selectedPeriod);
   };
+  
 
-
-  const filteredData = favProjects
+  const filteredData = (projects ?? [])
     .filter((item) => item.title.toLowerCase().includes(searchTerm))
     .filter((item) => {
       if (selectedHours.length === 0) return true;
@@ -124,21 +119,22 @@ function PageContent() {
     });
 
   // Extract unique hours from filteredData for the Filter component
-  const hoursOptions = Array.from(new Set(favProjects.map(item => item.hours)))
+  const hoursOptions = Array.from(new Set((projects ?? []).map(item => item.hours)))
     .map(hours => ({ label: `${hours} Horas`, value: hours }));
 
-  const tagOptions = Array.from(new Set(favProjects.flatMap(item => item.tags.map(tag => tag.name))))
+  const tagOptions = Array.from(new Set((projects ?? []).flatMap(item => item.tags.map(tag => tag.name))))
     .map(tagName => ({ label: tagName, value: tagName }));
 
   const modalityOptions = Array.from(new Set((projects ?? []).map(item => item.model)))
     .map(modality => ({ label: modality, value: modality }));
 
-  useEffect(() => {
+  React.useEffect(() => {
+    // Fetch favorites from the user
     const favorites = JSON.parse(localStorage.getItem('favorites') || '{}');
-    const favIDs = Object.keys(favorites).map(Number);
-    setFavoritesIDs(favIDs);
-    fetchProjects(favIDs);
-  }, [fetchProjects]);
+    setFavoritesIDs(Object.keys(favorites).map(Number));
+    console.log('period', selectedPeriod);
+    fetchProjects();
+  }, [fetchProjects, selectedPeriod]);
 
   return (
     <main className="flex min-h-screen flex-col px-4 lg:px-20 pb-10">
@@ -177,8 +173,8 @@ function PageContent() {
         </div>
       </div>
       <div className="max-w-[1500px] gap-2 grid grid-cols-12 grid-rows-2 px-2 md:px-8">
-        {filteredData.map((data, index) => (
-          <ProjectCard key={index} {...data} favoritesIDs={favoritesIDs} />
+        {filteredData.map((data) => (
+          <ProjectCard key={data.id} {...data} favoritesIDs={favoritesIDs} />
         ))}
       </div>
     </main>

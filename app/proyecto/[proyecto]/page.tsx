@@ -10,6 +10,13 @@ import FavoriteButton from './favorite-button';
 import { createClient } from '@/lib/supabase/client';
 import { useProjectsContext } from '@/context/useProjectsContext';
 
+const periodOptions = [
+  { label: "Verano", value: "verano" },
+  { label: "Agosto - Diciembre", value: "ago-dic" },
+  { label: "Invierno", value: "invierno" },
+  { label: "Febrero - Junio", value: "feb-jun" },
+];
+
 
 export default function Page(context: any) {
   const { projects } = useProjectsContext();
@@ -45,7 +52,7 @@ export default function Page(context: any) {
       <div className="relative flex flex-col md:flex-row justify-between items-center w-full pb-4">
         <FavoriteButton id={context.params.proyecto} />
         <div className="flex flex-col gap-1 w-full md:w-2/3">
-          <h1 className="text-3xl font-bold">{project?.title}</h1>
+          <h1 className="text-3xl font-bold">{project?.title}<span className='ml-4 text-lg font-medium text-red-700'>{periodOptions.find(option => option.value === project?.period)?.label}</span></h1>
           <p className="text-sm">{project?.organization}</p>
           <div className='flex flex-row gap-1 flex-wrap'>
             {project && project.tags?.map((tag, index) => (

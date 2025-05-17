@@ -17,6 +17,7 @@ interface BaseProject {
     groupKey: string;
     extraComments: string;
     status: string;
+    period: "verano" | "ago-dic" | "invierno" | "feb-jun";
 }
 
 export interface Project extends BaseProject {
@@ -106,7 +107,8 @@ export function mapProjectToProjectTagsSplit(project: Project): ProjectTagsSplit
         group: project.group,
         groupKey: project.groupKey,
         extraComments: project.extraComments,
-        status: project.status
+        status: project.status,
+        period: project.period,
     };
 }
 

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Check, PlusCircle } from "lucide-react";
+import { Check, ListFilter } from "lucide-react";
 import React from "react";
 
 interface FilterProps {
@@ -40,7 +40,7 @@ export default function Filter({ values, title, options, onChange }: FilterProps
     <Popover>
       <PopoverTrigger asChild>
         <UiButton variant="outline" size="sm" className="h-8 border-dashed px-1 truncate">
-          <PlusCircle className="mr-1 h-4 w-4" />
+          <ListFilter className="mr-1 h-4 w-4" />
           {title}
           {selectedValues?.size > 0 && (
             <>

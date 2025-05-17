@@ -1,10 +1,16 @@
 import { createClient } from "@/lib/supabase/client";
 import { Tag } from "@/lib/types/project/schema";
 import { Button, Card, CardFooter, CardHeader, Chip, Image } from "@nextui-org/react";
-import { Boxes, Clock, Star } from "lucide-react";
+import { Boxes, Clock, Package, Star } from "lucide-react";
 import NextImage from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+
+const modelDisplayMap: Record<string, string> = {
+  "CLIP | Proyecto Solidario Mixto": "Híbrido",
+  "CLIN | Proyecto Solidario en Línea": "Remoto",
+  "PSP | Proyecto Solidario Presencial": "Presencial",
+};
 
 interface CardComponentProps {
   id: number;
@@ -16,6 +22,7 @@ interface CardComponentProps {
   organization: string;
   group: number;
   groupKey: string;
+  model: string;
   favoritesIDs: number[];
 }
 
@@ -25,7 +32,7 @@ interface CardComponentProps {
  * 
  * @returns
  */
-export default function ProjectCard({ id, title, tags, image, description, hours, organization, group, groupKey, favoritesIDs }: CardComponentProps) {
+export default function ProjectCard({ id, title, tags, image, description, hours, organization, group, groupKey, model, favoritesIDs }: CardComponentProps) {
   const [favorite, setFavorite] = useState(false);
 
   const supabase = createClient();
@@ -91,9 +98,15 @@ export default function ProjectCard({ id, title, tags, image, description, hours
                 <Boxes className="w-3 h-3" strokeWidth={1} />
                 <p className="text-black text-sm font-medium ml-1">Clave a inscribir: {groupKey} Grupo {group}</p>
               </div>
-              <div className="flex items-center">
-                <Clock className="w-3 h-3" strokeWidth={1} />
-                <p className="text-black text-tiny ml-1">{hours} Horas</p>
+              <div className="flex">
+                <div className="flex items-center">
+                  <Clock className="w-3 h-3" strokeWidth={1} />
+                  <p className="text-black text-tiny ml-1">{hours} Horas</p>
+                </div>
+                <div className="flex items-center ml-2">
+                  <Package className="w-3 h-3" strokeWidth={1} />
+                  <p className="text-black text-tiny ml-1">{modelDisplayMap[model] || model}</p>
+                </div>
               </div>
             </div>
           </div>
