@@ -13,8 +13,8 @@ import React, { useCallback, Suspense } from "react";
 const periodOptions = [
   { label: "Verano", value: "verano" },
   { label: "Agosto - Diciembre", value: "ago-dic" },
-  { label: "Invierno", value: "invierno" },
-  { label: "Febrero - Junio", value: "feb-jun" },
+  //{ label: "Invierno", value: "invierno" },
+  //{ label: "Febrero - Junio", value: "feb-jun" },
 ];
 
 function PageContent() {
@@ -119,13 +119,13 @@ function PageContent() {
     });
 
   // Extract unique hours from filteredData for the Filter component
-  const hoursOptions = Array.from(new Set((projects ?? []).map(item => item.hours)))
+  const hoursOptions = Array.from(new Set((filteredData ?? []).map(item => item.hours)))
     .map(hours => ({ label: `${hours} Horas`, value: hours }));
 
-  const tagOptions = Array.from(new Set((projects ?? []).flatMap(item => item.tags.map(tag => tag.name))))
+  const tagOptions = Array.from(new Set((filteredData ?? []).flatMap(item => item.tags.map(tag => tag.name))))
     .map(tagName => ({ label: tagName, value: tagName }));
 
-  const modalityOptions = Array.from(new Set((projects ?? []).map(item => item.model)))
+  const modalityOptions = Array.from(new Set((filteredData ?? []).map(item => item.model)))
     .map(modality => ({ label: modality, value: modality }));
 
   React.useEffect(() => {
