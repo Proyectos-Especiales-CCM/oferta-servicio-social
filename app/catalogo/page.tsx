@@ -100,7 +100,10 @@ function PageContent() {
   
 
   const filteredData = (projects ?? [])
-    .filter((item) => item.title.toLowerCase().includes(searchTerm))
+    .filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.organization.toLowerCase().includes(searchTerm.toLowerCase())
+    )
     .filter((item) => {
       if (selectedHours.length === 0) return true;
       return selectedHours.includes(item.hours);

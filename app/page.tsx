@@ -10,14 +10,14 @@ function PageContent() {
     <main className="flex min-h-screen flex-col px-4 lg:px-20 py-10 items-center">
       <h1 className="text-5xl font-bold py-5">Ofertas Servicio Social</h1>
       <div className="flex flex-col md:flex-row md:space-x-10">
-        <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2" href="/catalogo/?period=verano">
+        <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2 bg-gradient-to-br from-lime-200 to-lime-500" href="/catalogo/?period=verano">
           <div className="flex flex-col items-center h-full justify-between">
             <h2 className="text-2xl font-mono font-bold">VERANO</h2>
             <Sun className="size-32" />
             <Button className="text-small" color="primary" radius="full" size="sm">Ver oferta</Button>
           </div>
         </a>
-        <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2" href="/catalogo/?period=ago-dic">
+        <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2 bg-gradient-to-br from-orange-200 to-orange-500" href="/catalogo/?period=ago-dic">
           <div className="flex flex-col items-center h-full justify-between">
             <div className="relative text-center font-mono">
               <span className="text-tiny absolute bottom-12 left-28">OTOÑO</span>
