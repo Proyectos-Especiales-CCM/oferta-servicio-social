@@ -7,14 +7,14 @@ import { ProjectsContextProvider } from '@/context/ProjectsContext';
 
 
 export const metadata: Metadata = {
-  title: 'Oferta Servicio Social - Verano y Agosto Diciembre 2025',
-  description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Verano y Agosto Diciembre 2025',
+  title: 'Oferta Servicio Social - Invierno 2025 y Febrero-Junio 2026',
+  description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Invierno 2025 y Febrero-Junio 2026',
   metadataBase: new URL('https://oferta-servicio-social.vercel.app/'),
   openGraph: {
     type: 'website',
     url: 'https://oferta-servicio-social.vercel.app/',
-    title: 'Oferta Servicio Social - Verano y Agosto Diciembre 2025',
-    description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Verano y Agosto Diciembre 2025',
+    title: 'Oferta Servicio Social - Invierno 2025 y Febrero-Junio 2026',
+    description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Invierno 2025 y Febrero-Junio 2026',
     images: [
       {
         url: 'https://oferta-servicio-social.vercel.app/opengraph/opengraph-image.png',
@@ -36,7 +36,7 @@ export default function RootLayout({
       <head>
         {/* Google Analytics */}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-LNX9YYPMQJ"
+          src="https://www.googletagmanager.com/gtag/js?id=G-B7ZLCVH9T5"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -44,7 +44,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-LNX9YYPMQJ');
+            gtag('config', 'G-B7ZLCVH9T5');
           `}
         </Script>
       </head>
