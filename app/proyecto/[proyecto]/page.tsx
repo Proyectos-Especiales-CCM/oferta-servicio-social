@@ -23,7 +23,6 @@ export default function Page(context: any) {
 
   const [project, setProject] = React.useState<ProjectTagsSplit>();
   const [error, setError] = React.useState<string | null>(null);
-  console.log(project?.map_url);
   const supabase = createClient();
 
   const fetchProject = useCallback(async (id: number) => {
@@ -31,7 +30,6 @@ export default function Page(context: any) {
       .from('projects')
       .select('*')
       .eq('id', id);
-    console.log("FETCH RESULT:", fetchedProject);
     if (error) setError(error.message);
     else if (fetchedProject) {
       const parsedProject = mapProjectToProjectTagsSplit(fetchedProject[0]);
