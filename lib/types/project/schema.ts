@@ -10,6 +10,7 @@ interface BaseProject {
     max: number;
     model: string;
     location: string;
+    map_url?: string;
     duration: string;
     hours: string;
     image: string;
@@ -109,6 +110,7 @@ export function mapProjectToProjectTagsSplit(project: Project): ProjectTagsSplit
         extraComments: project.extraComments,
         status: project.status,
         period: project.period,
+        map_url: project.map_url,
     };
 }
 

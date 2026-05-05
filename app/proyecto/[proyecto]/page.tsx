@@ -23,7 +23,7 @@ export default function Page(context: any) {
 
   const [project, setProject] = React.useState<ProjectTagsSplit>();
   const [error, setError] = React.useState<string | null>(null);
-
+  console.log(project?.map_url);
   const supabase = createClient();
 
   const fetchProject = useCallback(async (id: number) => {
@@ -31,6 +31,7 @@ export default function Page(context: any) {
       .from('projects')
       .select('*')
       .eq('id', id);
+    console.log("FETCH RESULT:", fetchedProject);
     if (error) setError(error.message);
     else if (fetchedProject) {
       const parsedProject = mapProjectToProjectTagsSplit(fetchedProject[0]);
@@ -85,6 +86,23 @@ export default function Page(context: any) {
           </div>
           <p className="text-medium font-bold pb-0.5">Actividades a realizar</p>
           <p className="text-medium whitespace-pre-line">{project?.description}</p>
+
+          {project?.map_url && (
+            <div className="w-full mt-4">
+              <p className="text-medium font-bold pb-1">Ubicación</p>
+
+              <div className="w-full h-[300px] rounded-md overflow-hidden border">
+                <iframe
+                  src={project.map_url}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4 col-span-6 md:col-span-4">
