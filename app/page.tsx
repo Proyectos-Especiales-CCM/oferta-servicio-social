@@ -10,7 +10,7 @@ function PageContent() {
     <main className="flex min-h-screen flex-col px-4 lg:px-20 py-10 items-center">
       <h1 className="text-5xl font-bold py-5">Ofertas Servicio Social</h1>
       <div className="flex flex-col md:flex-row md:space-x-10">
-        <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2 bg-gradient-to-br from-sky-200 to-sky-500" href="/catalogo/?period=invierno">
+        {/* <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2 bg-gradient-to-br from-sky-200 to-sky-500" href="/catalogo/?period=invierno">
           <div className="flex flex-col items-center h-full justify-between">
             <h2 className="text-2xl font-mono font-bold">INVIERNO</h2>
             <Snowflake className="size-32" />
@@ -28,8 +28,8 @@ function PageContent() {
             <Flower className="size-32" />
             <Button className="text-small" color="primary" radius="md" size="sm">Ver oferta</Button>
           </div>
-        </a>
-        {/* <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2 bg-gradient-to-br from-lime-200 to-lime-500" href="/catalogo/?period=verano">
+        </a> */}
+        <a className="m-10 p-4 size-80 lg:size-96 rounded border-black border-2 bg-gradient-to-br from-lime-200 to-lime-500" href="/catalogo/?period=verano">
           <div className="flex flex-col items-center h-full justify-between">
             <h2 className="text-2xl font-mono font-bold">VERANO</h2>
             <Sun className="size-32" />
@@ -47,7 +47,7 @@ function PageContent() {
             <LeafyGreen className="size-32" />
             <Button className="text-small" color="primary" radius="md" size="sm">Ver oferta</Button>
           </div>
-        </a> */}
+        </a>
       </div>
     </main>
   );
