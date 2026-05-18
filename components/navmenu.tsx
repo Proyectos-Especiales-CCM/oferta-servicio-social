@@ -38,7 +38,7 @@ export async function NavMenu() {
           <NavigationMenuItem>
             <Link href="/catalogo" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Catalogo
+                Catálogo
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
