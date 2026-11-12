@@ -78,9 +78,28 @@ export interface ProjectTagsSplit extends BaseProject {
 }
 
 export function mapProjectToProjectTagsSplit(project: Project): ProjectTagsSplit {
+    // Supabase can return null even when the frontend interface says string.
+    const invalidFields: string[] = [];
+    const text = (field: keyof Project): string => {
+        const value = project[field];
+        if (typeof value === 'string') return value;
+        invalidFields.push(field);
+        return '';
+    };
+    const title = text('title');
+    const organization = text('organization');
+    const hours = text('hours');
+    const model = text('model');
+    const rawTags = text('tags');
+    if (invalidFields.length) {
+        console.warn('[projects] Registro con campos inválidos; se usarán valores vacíos', {
+            projectId: project.id,
+            fields: invalidFields,
+        });
+    }
     let tags: Tag[] = [];
-    if (project.tags) {
-        tags = project.tags.split(',').map(tag => {
+    if (rawTags) {
+        tags = rawTags.split(',').map(tag => tag.trim()).filter(Boolean).map(tag => {
             const colorObj = colors.find(color => color.label === tag.trim());
             return {
                 name: tag.trim(),
@@ -91,19 +110,19 @@ export function mapProjectToProjectTagsSplit(project: Project): ProjectTagsSplit
 
     return {
         id: project.id,
-        organization: project.organization,
+        organization,
         population: project.population,
-        title: project.title,
+        title,
         objective: project.objective,
         description: project.description,
         schedule: project.schedule,
         tags: tags,
         abilities: project.abilities,
         max: project.max,
-        model: project.model,
+        model,
         location: project.location,
         duration: project.duration,
-        hours: project.hours,
+        hours,
         image: project.image,
         group: project.group,
         groupKey: project.groupKey,

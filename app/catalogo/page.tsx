@@ -1,6 +1,7 @@
 "use client"
 
 import { Filter, ProjectCard, SearchBar } from "@/components/home";
+import ProjectErrorBoundary from "@/components/home/ProjectErrorBoundary";
 import Select from "@/components/home/Select";
 import { useProjectsContext } from "@/context/useProjectsContext";
 import { createClient } from "@/lib/supabase/client";
@@ -101,8 +102,8 @@ function PageContent() {
 
   const filteredData = (projects ?? [])
     .filter((item) =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.organization.toLowerCase().includes(searchTerm.toLowerCase())
+      (item.title ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.organization ?? "").toLowerCase().includes(searchTerm.toLowerCase())
     )
     .filter((item) => {
       if (selectedHours.length === 0) return true;
@@ -177,7 +178,9 @@ function PageContent() {
       </div>
       <div className="max-w-[1500px] gap-2 grid grid-cols-12 grid-rows-2 px-2 md:px-8">
         {filteredData.map((data) => (
-          <ProjectCard key={data.id} {...data} favoritesIDs={favoritesIDs} />
+          <ProjectErrorBoundary key={data.id} projectId={data.id}>
+            <ProjectCard {...data} favoritesIDs={favoritesIDs} />
+          </ProjectErrorBoundary>
         ))}
       </div>
     </main>
