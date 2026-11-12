@@ -12,8 +12,8 @@ import { mapProjectToProjectTagsSplit, ProjectTagsSplit } from "@/lib/types/proj
 import { useProjectsContext } from "@/context/useProjectsContext";
 
 const periodOptions = [
-  { label: "Verano", value: "verano" },
-  { label: "Agosto - Diciembre", value: "ago-dic" },
+  //{ label: "Verano", value: "verano" },
+  //{ label: "Agosto - Diciembre", value: "ago-dic" },
   { label: "Invierno", value: "invierno" },
   { label: "Febrero - Junio", value: "feb-jun" },
 ];

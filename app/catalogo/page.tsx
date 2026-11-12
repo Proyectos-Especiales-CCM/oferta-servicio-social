@@ -12,10 +12,10 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, Suspense } from "react";
 
 const periodOptions = [
-  { label: "Verano", value: "verano" },
-  { label: "Agosto - Diciembre", value: "ago-dic" },
-  //{ label: "Invierno", value: "invierno" },
-  //{ label: "Febrero - Junio", value: "feb-jun" },
+  //{ label: "Verano", value: "verano" },
+  //{ label: "Agosto - Diciembre", value: "ago-dic" },
+  { label: "Invierno", value: "invierno" },
+  { label: "Febrero - Junio", value: "feb-jun" },
 ];
 
 function PageContent() {
@@ -100,6 +100,7 @@ function PageContent() {
   };
   
 
+  
   const filteredData = (projects ?? [])
     .filter((item) =>
       (item.title ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -142,7 +143,12 @@ function PageContent() {
 
   return (
     <main className="flex min-h-screen flex-col px-4 lg:px-20 pb-10">
-      <h1 className="text-3xl font-bold py-5">Oferta Servicio Social - {selectedPeriod ? periodOptions.find(option => option.value === selectedPeriod)?.label + " -" : ''} {new Date().getFullYear()}</h1>
+      <h1 className="text-3xl font-bold py-5">
+        Oferta Servicio Social
+        {selectedPeriod
+          ? ` - ${periodOptions.find(option => option.value === selectedPeriod)?.label ?? ""}`
+          : " - 2027"}
+      </h1>
       <div className="flex flex-col md:flex-row mb-6 gap-2 items-center">
         <SearchBar searchTerm={searchTerm} onSearch={handleSearch} />
         {/* Add the Filter component here */}
