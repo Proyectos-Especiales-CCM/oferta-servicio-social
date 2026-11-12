@@ -6,25 +6,27 @@ import { NavMenu } from '@/components/navmenu';
 import { ProjectsContextProvider } from '@/context/ProjectsContext';
 
 
+
 export const metadata: Metadata = {
-  title: 'Oferta Servicio Social - Verano 2026 y Agosto-Diciembre 2026',
-  description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Verano 2026 y Agosto-Diciembre 2026',
+  title: 'Oferta Servicio Social - Febrero-Junio 2027 e Invierno 2027',
+  description: 'Oferta de proyectos de Servicio Social del Tec de Monterrey Campus Ciudad de México para los periodos Febrero-Junio 2027 e Invierno 2027',
   metadataBase: new URL('https://oferta-servicio-social.vercel.app/'),
   openGraph: {
     type: 'website',
     url: 'https://oferta-servicio-social.vercel.app/',
-    title: 'Oferta Servicio Social - Verano 2026 y Agosto-Diciembre 2026',
-    description: 'Oferta de proyectos de Servicio Social Tec CCM para el periodo de Verano 2026 y Agosto-Diciembre 2026',
+    title: 'Oferta Servicio Social - Febrero-Junio 2027 e Invierno 2027',
+    description: 'Consulta los proyectos de Servicio Social disponibles para Febrero-Junio 2027 e Invierno 2027 en el Tec de Monterrey Campus Ciudad de México.',
     images: [
       {
         url: 'https://oferta-servicio-social.vercel.app/opengraph/opengraph-image.png',
         width: 1200,
         height: 630,
-        alt: 'Preview Image',
+        alt: 'Catálogo de Servicio Social Tec CCM 2027',
       },
     ],
   },
-}
+};
+
 
 export default function RootLayout({
   children,
